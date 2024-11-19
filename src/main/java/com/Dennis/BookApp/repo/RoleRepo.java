@@ -1,6 +1,6 @@
 package com.Dennis.BookApp.repo;
 
-import com.Dennis.BookApp.role.Role;
+import com.Dennis.BookApp.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

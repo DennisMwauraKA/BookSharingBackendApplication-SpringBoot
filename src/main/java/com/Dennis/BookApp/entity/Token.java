@@ -2,10 +2,17 @@ package com.Dennis.BookApp.entity;
 
 
 import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Token {
 
     @Id
@@ -20,67 +27,14 @@ public class Token {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Token(){
-
-    }
 
 
 
-    public Token(String token, LocalDateTime createdAt, LocalDateTime expiresAt, User user) {
-        this.token = token;
-        this.createdAt = createdAt;
-        this.expiresAt = expiresAt;
-        this.user = user;
-    }
 
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
-    public String getToken() {
-        return token;
-    }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public void setExpiresAt(LocalDateTime expiresAt) {
-        this.expiresAt = expiresAt;
-    }
-
-    public LocalDateTime getValidatedAt() {
-        return validatedAt;
-    }
-
-    public void setValidatedAt(LocalDateTime validatedAt) {
-        this.validatedAt = validatedAt;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
 
 }

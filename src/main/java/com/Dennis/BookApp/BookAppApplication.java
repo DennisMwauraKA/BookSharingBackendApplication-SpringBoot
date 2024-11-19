@@ -1,7 +1,7 @@
 package com.Dennis.BookApp;
 
 import com.Dennis.BookApp.repo.RoleRepo;
-import com.Dennis.BookApp.role.Role;
+import com.Dennis.BookApp.entity.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @EnableAsync
 public class BookAppApplication {
 

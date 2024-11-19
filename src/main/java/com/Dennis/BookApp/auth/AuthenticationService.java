@@ -22,7 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -57,16 +56,15 @@ public class AuthenticationService {
 // generate an encoded password
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
-        var user = new User(
-                request.getFirstName(),
-                request.getLastName(),
-                request.getEmail(),
-                encryptedPassword,
-                false,
-                false,
-                List.of(userRole)
-
-        );
+        User user = User.builder().
+                firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password(encryptedPassword)
+                .enabled(false)
+                .accountLocked(false)
+                .roles(List.of(userRole))
+                .build();
         userRepository.save(user);
         sendValidationEmail(user);
     }
@@ -88,16 +86,13 @@ public class AuthenticationService {
     private String generateAndSaveActivationToken(User user) {
 
         String generatedToken = generateActivationCode(6);
+        Token token = Token.builder()
+                .token(generatedToken)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(10))
+                .user(user)
+                .build();
 
-        LocalDateTime createdAt = LocalDateTime.now();
-        LocalDateTime expiresAt = createdAt.plusMinutes(10);
-        Token token = new Token(
-                generatedToken,
-                createdAt,
-                expiresAt,
-                user
-
-        );
         tokenRepository.save(token);
         return generatedToken;
     }
