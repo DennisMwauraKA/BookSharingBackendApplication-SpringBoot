@@ -9,16 +9,18 @@ import com.Dennis.BookApp.entity.Book;
 import com.Dennis.BookApp.entity.BookTransactionHistory;
 import com.Dennis.BookApp.entity.User;
 import com.Dennis.BookApp.exceptionhandler.OperationNotPermittedException;
+import com.Dennis.BookApp.file.FileStorageService;
 import com.Dennis.BookApp.repo.BookRepo;
 import com.Dennis.BookApp.repo.BookTransactionsHistoryRepo;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,16 +28,17 @@ import java.util.Objects;
 import static com.Dennis.BookApp.entity.BookSpecification.withOwnerId;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
 
-    @Autowired
-    private BookRepo bookRepository;
-    @Autowired
-    private BookMapper bookMapper;
 
-    @Autowired
-    private BookTransactionsHistoryRepo bookTransactionsHistoryRepo;
+    private final BookRepo bookRepository;
+
+    private final BookMapper bookMapper;
+    private final FileStorageService fileStorageService;
+
+    private final BookTransactionsHistoryRepo bookTransactionsHistoryRepo;
 
     public Integer save(BookRequestDto bookRequestDto, Authentication connectedUser) {
         User user = ((User) connectedUser.getPrincipal());
@@ -164,18 +167,18 @@ public class BookService {
         }
 
         final boolean isAlreadyBorrowed = bookTransactionsHistoryRepo.isAlreadyBorrowedByUser(bookId, user.getId());
-if (isAlreadyBorrowed){
-    throw new OperationNotPermittedException("you can not borrow the book as it is already borrowed");
-}
+        if (isAlreadyBorrowed) {
+            throw new OperationNotPermittedException("you can not borrow the book as it is already borrowed");
+        }
 
-BookTransactionHistory bookTransactionHistory= BookTransactionHistory.builder()
-        .user(user)
-        .book(book)
-        .returned(false)
-        .returnApproved(false)
-        .build();
+        BookTransactionHistory bookTransactionHistory = BookTransactionHistory.builder()
+                .user(user)
+                .book(book)
+                .returned(false)
+                .returnApproved(false)
+                .build();
 
-return bookTransactionsHistoryRepo.save(bookTransactionHistory).getUser().getId();
+        return bookTransactionsHistoryRepo.save(bookTransactionHistory).getUser().getId();
     }
 
 
@@ -188,9 +191,35 @@ return bookTransactionsHistoryRepo.save(bookTransactionHistory).getUser().getId(
         if (Objects.equals(book.getOwner().getId(), user.getId())) {
             throw new OperationNotPermittedException("you cannot Borrow or return  your own book");
         }
-BookTransactionHistory bookTransactionHistory = bookTransactionsHistoryRepo.findByBookIdAndUserId(bookId, user.getId())
-        .orElseThrow(()->new OperationNotPermittedException("You did not borrow this book"));
+        BookTransactionHistory bookTransactionHistory = bookTransactionsHistoryRepo.findByBookIdAndUserId(bookId, user.getId())
+                .orElseThrow(() -> new OperationNotPermittedException("You did not borrow this book"));
         bookTransactionHistory.setReturned(true);
-      return  bookTransactionsHistoryRepo.save(bookTransactionHistory).getUser().getId();
+        return bookTransactionsHistoryRepo.save(bookTransactionHistory).getUser().getId();
+    }
+
+
+    public Integer approveReturnedBorrowedBook(Authentication connectedUser, Integer bookId) {
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException("No book found in this section" + bookId));
+        if (book.isArchived() || !book.isShareable()) {
+            throw new OperationNotPermittedException("The book can not be returned because it is either archived or not shareable");
+        }
+        User user = ((User) connectedUser.getPrincipal());
+        if (Objects.equals(book.getOwner().getId(), user.getId())) {
+            throw new OperationNotPermittedException("you cannot Borrow or return  your own book");
+        }
+        BookTransactionHistory bookTransactionHistory = bookTransactionsHistoryRepo.findByBookIdAndOwnerId(bookId, user.getId())
+                .orElseThrow(() -> new OperationNotPermittedException("The book isnot returned yet"));
+
+        bookTransactionHistory.setReturnApproved(true);
+        return bookTransactionsHistoryRepo.save(bookTransactionHistory).getUser().getId();
+    }
+
+    public void uploadBookCoverPicture(MultipartFile file, Authentication connectedUser, Integer bookId) {
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException("No book found in this section" + bookId));
+        User user = ((User) connectedUser.getPrincipal());
+var bookCover =fileStorageService.saveFile(file,user.getId());
+book.setBookCover(bookCover);
+bookRepository.save(book);
     }
 }

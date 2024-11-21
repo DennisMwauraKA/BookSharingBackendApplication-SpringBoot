@@ -3,6 +3,7 @@ package com.Dennis.BookApp.entity;
 import com.Dennis.BookApp.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Getter
 @Entity
 @Setter
-@Builder
+@SuperBuilder 
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -24,7 +25,7 @@ public class Book extends BaseEntity {
     private boolean shareable;
     private String synopsis;
     private String isbn;
-
+    private String bookCover;
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
@@ -48,6 +49,7 @@ public class Book extends BaseEntity {
         return Math.round(rate * 10.0) / 10.0;
 
     }
+
 
 
 }

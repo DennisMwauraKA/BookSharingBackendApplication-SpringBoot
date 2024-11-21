@@ -5,6 +5,7 @@ import com.Dennis.BookApp.dtos.BorrowedBookResponse;
 import com.Dennis.BookApp.dtos.GetBookResponseDto;
 import com.Dennis.BookApp.entity.Book;
 import com.Dennis.BookApp.entity.BookTransactionHistory;
+import com.Dennis.BookApp.file.FileUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,7 +40,7 @@ public class BookMapper {
                 .isbn(book.getIsbn())
                 .synopsis(book.getSynopsis())
                 .owner(book.getOwner().getFirstName())
-                // .cover(book.getCover)
+                .cover(FileUtils.readFileFromLocation(book.getBookCover()))
                 .rate(book.getRate())
                 .archived(book.isArchived())
                 .shareable(book.isShareable())

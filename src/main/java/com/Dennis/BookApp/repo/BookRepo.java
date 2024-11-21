@@ -17,7 +17,9 @@ public interface BookRepo extends JpaRepository<Book, Integer>, JpaSpecification
             FROM Book book
             WHERE book.archived =false
             AND book.shareable = true
-            AND book.owner.id !=:userId
+            AND book.createdBy!=:userId
             """)
     Page<Book> findAllDisplayableBooks(Pageable pageable, Integer userId);
+
+    Integer id(Integer id);
 }

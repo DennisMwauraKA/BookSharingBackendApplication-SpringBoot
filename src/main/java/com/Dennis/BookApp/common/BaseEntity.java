@@ -1,6 +1,11 @@
 package com.Dennis.BookApp.common;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -9,6 +14,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+
 public class BaseEntity {
     @Id
     @GeneratedValue
@@ -29,47 +40,9 @@ public class BaseEntity {
     @Column(insertable = false)
     private Integer lastModifiedBy;
 
-   public BaseEntity(){}
 
 
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Integer getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Integer createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Integer getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(Integer lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
 
 
-    public BaseEntity(LocalDateTime createdDate, LocalDateTime lastModifiedDate, Integer createdBy, Integer lastModifiedBy) {
-        this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
-        this.createdBy = createdBy;
-        this.lastModifiedBy = lastModifiedBy;
-    }
 }
