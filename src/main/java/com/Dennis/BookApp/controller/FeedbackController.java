@@ -5,6 +5,7 @@ import com.Dennis.BookApp.common.PageResponse;
 import com.Dennis.BookApp.dtos.FeedBackResponseDto;
 import com.Dennis.BookApp.dtos.FeedbackRequestDto;
 import com.Dennis.BookApp.service.FeedBackService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("feedbacks")
 @RequiredArgsConstructor
+@Tag(name="Feedback")
 public class FeedbackController {
 
     private final FeedBackService feedBackService;

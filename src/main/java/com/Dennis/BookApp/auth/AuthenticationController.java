@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Authentication")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService service;
 
+    private final AuthenticationService service;
+
+    @Autowired
+    public AuthenticationController(AuthenticationService service) {
+        this.service = service;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegistrationRequest request) throws MessagingException {

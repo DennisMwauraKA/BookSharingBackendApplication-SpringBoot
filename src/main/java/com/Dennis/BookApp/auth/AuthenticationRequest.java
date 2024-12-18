@@ -6,13 +6,13 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 public class AuthenticationRequest {
-    @NotEmpty
-    @NotBlank
-    @Email
+    @NotEmpty(message = "email is mandatory")
+    @NotBlank(message = "email is mandatory")
+    @Email(message = "email is not well formatted")
     private String email;
-    @NotEmpty
-    @NotBlank
-    @Size(min = 6)
+    @NotEmpty(message="password is mandatory")
+    @NotBlank(message = "password should not be empty")
+    @Size(min = 6, message = "password should be minimum 8 characters ")
     private String password;
 
     public @NotEmpty @NotBlank @Email String getEmail() {

@@ -37,7 +37,7 @@ public class BookController {
     }
 
     // implementing paging
-    @GetMapping("/")
+    @GetMapping("/find-all-books")
     public ResponseEntity<PageResponse<GetBookResponseDto>> findAllBooks(@RequestParam(name = "page", defaultValue = "0", required = false) int page, @RequestParam(name = "size", defaultValue = "10", required = false) int size, Authentication connectedUser) {
 
         return ResponseEntity.ok(service.findByAllBooks(page, size, connectedUser));

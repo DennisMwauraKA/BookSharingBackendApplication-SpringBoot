@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
 
                 ),
                 description = "Open Api documentation for BookSharingApplication",
-                title = "OpenApi specification",
+                title = "BookSharing Open-Api Specification",
                 version = "1.0",
                 license = @License(
                         name = "license",

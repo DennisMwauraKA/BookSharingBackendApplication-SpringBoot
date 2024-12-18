@@ -38,7 +38,7 @@ public class AuthenticationService {
     private EmailService emailService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder     passwordEncoder;
 
     @Autowired
     private AuthenticationManager authenticationManager;

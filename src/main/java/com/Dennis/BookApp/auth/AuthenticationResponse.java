@@ -1,18 +1,19 @@
 package com.Dennis.BookApp.auth;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class AuthenticationResponse {
 
     private String token;
 
-    public String getToken() {
-        return token;
-    }
 
-    public AuthenticationResponse(String token) {
-        this.token = token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }
